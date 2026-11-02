@@ -1,770 +1,385 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080d0a">
-<title>GOHAN SECURITY</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d0a">
+  <title>GOHAN SECURITY</title>
 
-<style>
-:root{
- --green:#9bf00b;
- --bg:#070b08;
- --panel:#111a14;
- --border:#293b2d;
- --text:#e8f5e9;
- --muted:#91a397;
-}
-*{box-sizing:border-box}
-body{
- margin:0;
- background:var(--bg);
- color:var(--text);
- font-family:Arial,sans-serif;
-}
-header{
- padding:22px 15px;
- text-align:center;
- background:#0b120d;
- border-bottom:1px solid var(--border);
-}
-.logo{
- color:var(--green);
- font-size:25px;
- font-weight:900;
- letter-spacing:4px;
-}
-.logo span{color:white}
-.status{
- margin-top:9px;
- color:var(--green);
- font-size:11px;
-}
-.layout{max-width:1200px;margin:auto}
-.sidebar{
- display:flex;
- gap:7px;
- overflow-x:auto;
- padding:12px;
- background:#0b120d;
- border-bottom:1px solid var(--border);
-}
-.nav{
- flex:0 0 auto;
- padding:11px 14px;
- border:1px solid var(--border);
- border-radius:7px;
- background:#111a14;
- color:white;
- font-size:12px;
-}
-.nav.active{
- background:#263b20;
- color:var(--green);
- border-color:var(--green);
-}
-main{padding:18px;max-width:1100px;margin:auto}
-.page{display:none}
-.page.active{display:block}
-h1{font-size:25px;margin:5px 0}
-h2{font-size:17px;color:var(--green)}
-.subtitle,.muted{color:var(--muted);font-size:13px;line-height:1.5}
-.grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:12px;
-}
-.card{
- background:linear-gradient(145deg,#152019,#101812);
- border:1px solid var(--border);
- border-radius:12px;
- padding:16px;
- margin:12px 0;
-}
-.stat-label{font-size:11px;color:var(--muted)}
-.stat-value{font-size:20px;color:var(--green);font-weight:bold;margin-top:9px}
-.icon{font-size:23px;margin-bottom:10px}
-.btn{
- background:var(--green);
- color:#10170b;
- border:0;
- border-radius:7px;
- padding:12px 15px;
- font-weight:bold;
- margin:5px 3px 5px 0;
-}
-.btn.secondary{background:#293b2d;color:white}
-.btn.danger{background:#963c3c;color:white}
-.result{
- background:#080e09;
- border:1px solid var(--border);
- color:#b8ed9a;
- padding:13px;
- border-radius:8px;
- margin-top:12px;
- font-size:12px;
- line-height:1.6;
- white-space:pre-wrap;
- overflow-wrap:anywhere;
-}
-input[type=text]{
- width:100%;
- padding:12px;
- background:#080e09;
- color:white;
- border:1px solid var(--border);
- border-radius:7px;
- margin:8px 0;
-}
-input[type=file]{max-width:100%;margin:12px 0}
-label{display:block;margin:12px 0;font-size:13px}
-.notice{
- background:#241f12;
- border-left:3px solid #ffc857;
- border-radius:5px;
- padding:12px;
- color:#f3dfaa;
- font-size:12px;
- line-height:1.6;
-}
-.progress{
- height:7px;
- background:#26372b;
- border-radius:10px;
- overflow:hidden;
- margin-top:12px;
-}
-.progress div{
- width:0;
- height:100%;
- background:var(--green);
- transition:width .5s;
-}
-footer{
- text-align:center;
- padding:25px;
- border-top:1px solid var(--border);
- color:var(--muted);
- font-size:11px;
-}
-@keyframes glow{
- 0%,100%{box-shadow:0 0 4px #9bf00b22}
- 50%{box-shadow:0 0 15px #9bf00b44}
-}
-.logo{animation:glow 3s infinite}
-@media(max-width:380px){
- .grid{grid-template-columns:1fr}
-}
-</style>
+  <style>
+    :root {
+      --green: #9bf00b;
+      --bg: #080d0a;
+      --panel: #111a14;
+      --text: #f2f5f2;
+      --muted: #9aa69d;
+      --border: #26352a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 22px;
+      border-bottom: 1px solid var(--border);
+      background: #0c130e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo {
+      color: var(--green);
+      font-size: 23px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .status {
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 16px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p, .muted {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      color: var(--green);
+      font-size: 17px;
+      margin-bottom: 15px;
+    }
+
+    .value {
+      font-size: 23px;
+      font-weight: bold;
+      margin: 8px 0;
+      overflow-wrap: anywhere;
+    }
+
+    button, input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    input {
+      background: #080d0a;
+      color: white;
+    }
+
+    button {
+      background: var(--green);
+      color: #101510;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      filter: brightness(.9);
+    }
+
+    .secondary {
+      background: #202d24;
+      color: white;
+    }
+
+    .result {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      margin-top: 12px;
+    }
+
+    .warning {
+      color: #ffd166;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
- <div class="logo">GOHAN <span>SECURITY</span></div>
- <div class="status">● CONTROL CENTER ONLINE</div>
+  <div class="logo">GOHAN SECURITY</div>
+  <div class="status">● SISTEMA ACTIVO</div>
 </header>
 
-<div class="layout">
-
-<nav class="sidebar">
- <button class="nav active" data-page="dashboard">⌂ Dashboard</button>
- <button class="nav" data-page="device">▣ Dispositivo</button>
- <button class="nav" data-page="browser">◈ Navegador</button>
- <button class="nav" data-page="network">⌁ Red</button>
- <button class="nav" data-page="wifi">◉ Wi-Fi</button>
- <button class="nav" data-page="files">▤ Archivos</button>
- <button class="nav" data-page="reports">▧ Informes</button>
- <button class="nav" data-page="security">✦ Seguridad</button>
-</nav>
-
 <main>
+  <section class="welcome">
+    <h1>Panel de seguridad</h1>
+    <p>Herramientas de diagnóstico y revisión de tu dispositivo.</p>
+  </section>
 
-<section class="page active" id="dashboard">
- <h1>Dashboard</h1>
- <p class="subtitle">Panel central de GOHAN SECURITY.</p>
+  <section class="grid">
+    <div class="card">
+      <h2>Estado del dispositivo</h2>
+      <div class="value" id="deviceStatus">Comprobando...</div>
+      <p class="result" id="deviceInfo"></p>
+    </div>
 
- <div class="grid">
-  <div class="card">
-   <div class="icon">▣</div>
-   <div class="stat-label">DISPOSITIVO</div>
-   <div class="stat-value" id="statDevice">PREPARADO</div>
-  </div>
-  <div class="card">
-   <div class="icon">⌁</div>
-   <div class="stat-label">CONEXIÓN</div>
-   <div class="stat-value" id="statNetwork">--</div>
-  </div>
-  <div class="card">
-   <div class="icon">◈</div>
-   <div class="stat-label">NAVEGADOR</div>
-   <div class="stat-value" id="statBrowser">PREPARADO</div>
-  </div>
-  <div class="card">
-   <div class="icon">▧</div>
-   <div class="stat-label">INFORMES</div>
-   <div class="stat-value" id="statReports">0</div>
-  </div>
- </div>
+    <div class="card">
+      <h2>Estado de conexión</h2>
+      <div class="value" id="connectionStatus">Comprobando...</div>
+      <p class="result" id="connectionInfo"></p>
+    </div>
 
- <div class="card">
-  <h2>Diagnóstico general</h2>
-  <button class="btn" onclick="diagnostico()">INICIAR DIAGNÓSTICO</button>
-  <div class="progress"><div id="progressBar"></div></div>
-  <div class="result" id="dashboardResult">Sistema preparado.</div>
- </div>
- <div class="card">
-  <h2>Registro de actividad</h2>
-  <div class="result" id="activity">GOHAN SECURITY iniciado.</div>
- </div>
-</section>
+    <div class="card">
+      <h2>Navegador</h2>
+      <div class="value" id="browserStatus">Detectando...</div>
+      <p class="result" id="browserInfo"></p>
+    </div>
 
-<section class="page" id="device">
- <h1>Información del dispositivo</h1>
- <p class="subtitle">Datos básicos disponibles para el navegador.</p>
- <div class="card">
-  <h2>Información del equipo</h2>
-  <button class="btn" onclick="getDevice()">CONSULTAR DISPOSITIVO</button>
-  <div class="result" id="deviceResult">Esperando consulta...</div>
- </div>
-</section>
+    <div class="card">
+      <h2>Fecha y hora</h2>
+      <div class="value" id="clock">--:--</div>
+      <p class="result" id="date"></p>
+    </div>
+  </section>
 
-<section class="page" id="browser">
- <h1>Información del navegador</h1>
- <p class="subtitle">Características del navegador utilizado.</p>
- <div class="card">
-  <h2>Datos del navegador</h2>
-  <button class="btn" onclick="getBrowser()">ANALIZAR NAVEGADOR</button>
-  <div class="result" id="browserResult">Esperando consulta...</div>
- </div>
-</section>
+  <section class="card">
+    <h2>Información de Wi-Fi</h2>
+    <p class="muted">
+      Puedes escribir voluntariamente el nombre de tu red.
+      Esta página no puede obtener ni solicitar tu contraseña.
+    </p>
+    <input id="wifiName" type="text" placeholder="Nombre de tu red Wi-Fi">
+    <button onclick="saveWifi()">Guardar nombre</button>
+    <p class="result" id="wifiResult"></p>
+  </section>
 
-<section class="page" id="network">
- <h1>Diagnóstico de red</h1>
- <p class="subtitle">Estado de la conexión a Internet.</p>
- <div class="card">
-  <h2>Conexión</h2>
-  <button class="btn" onclick="getNetwork()">COMPROBAR RED</button>
-  <div class="result" id="networkResult">Esperando consulta...</div>
- </div>
- <div class="notice">El navegador no permite consultar directamente las contraseñas Wi-Fi ni los datos privados del router.</div>
-</section>
+  <section class="card">
+    <h2>Revisión de archivos</h2>
+    <p class="muted">
+      Selecciona un archivo para consultar su nombre, tamaño y tipo.
+      El archivo no se sube a ningún servidor.
+    </p>
+    <input type="file" id="fileInput">
+    <button onclick="inspectFile()">Analizar archivo</button>
+    <p class="result" id="fileResult"></p>
+    <p class="warning">
+      Esta herramienta no es un antivirus y no determina si un archivo es seguro.
+    </p>
+  </section>
 
-<section class="page" id="wifi">
- <h1>Wi-Fi voluntario</h1>
- <p class="subtitle">Compartir voluntariamente el nombre de una red.</p>
- <div class="card">
-  <h2>Nombre de red</h2>
-  <input type="text" id="wifiName" placeholder="Nombre de tu red Wi-Fi (opcional)">
-  <button class="btn" onclick="saveWifi()">GUARDAR EN INFORME</button>
-  <div class="result" id="wifiResult">No se ha compartido ningún dato.</div>
- </div>
- <div class="notice">No escribas contraseñas. GOHAN SECURITY no obtiene ni almacena claves Wi-Fi.</div>
-</section>
+  <section class="card">
+    <h2>Crear informe</h2>
+    <p class="muted">
+      El informe incluye información básica de diagnóstico.
+      Revisa su contenido antes de compartirlo.
+    </p>
+    <label>
+      <input type="checkbox" id="consent" style="width:auto">
+      Confirmo que deseo generar el informe.
+    </label>
+    <button onclick="createReport()">Generar informe JSON</button>
+    <p class="result" id="reportResult"></p>
+  </section>
 
-<section class="page" id="files">
- <h1>Revisión de archivos</h1>
- <p class="subtitle">Consulta información básica de archivos seleccionados.</p>
- <div class="card">
-  <h2>Seleccionar archivo</h2>
-  <input type="file" id="fileInput">
-  <button class="btn" onclick="analyzeFile()">ANALIZAR ARCHIVO</button>
-  <div class="result" id="fileResult">Esperando archivo...</div>
- </div>
- <div class="notice">Esto no es un antivirus. El análisis no certifica que un archivo sea seguro.</div>
-</section>
-
-<section class="page" id="reports">
- <h1>Centro de informes</h1>
- <p class="subtitle">Generación e importación de informes.</p>
-
- <div class="card">
-  <h2>Generar informe</h2>
-  <label><input type="checkbox" id="consent"> Acepto generar un informe con los datos mostrados.</label>
-  <button class="btn" onclick="createReport()">GENERAR INFORME</button>
-  <button class="btn secondary" onclick="downloadReport()">DESCARGAR INFORME</button>
-  <div class="result" id="reportResult">Todavía no hay informe.</div>
- </div>
-
- <div class="card">
-  <h2>Importar informe</h2>
-  <input type="file" id="importInput" accept=".json">
-  <button class="btn" onclick="importReport()">IMPORTAR</button>
-  <button class="btn secondary" onclick="showImported()">VER INFORMES</button>
-  <button class="btn danger" onclick="clearImported()">BORRAR INFORMES</button>
-  <div class="result" id="importResult">No hay informes importados.</div>
- </div>
-</section>
-
-<section class="page" id="security">
- <h1>Centro de seguridad</h1>
- <p class="subtitle">Comprobaciones y recomendaciones.</p>
- <div class="card">
-  <h2>Comprobación básica</h2>
-  <button class="btn" onclick="securityCheck()">COMPROBAR SEGURIDAD</button>
-  <div class="result" id="securityResult">Esperando comprobación...</div>
- </div>
- <div class="card">
-  <h2>Recomendaciones</h2>
-  <p>✓ Mantén actualizado tu dispositivo.</p>
-  <p>✓ Usa contraseñas diferentes.</p>
-  <p>✓ Activa la autenticación en dos pasos.</p>
-  <p>✓ Evita enlaces sospechosos.</p>
-  <p>✓ Descarga aplicaciones de fuentes oficiales.</p>
-  <p>✓ No compartas información privada.</p>
- </div>
-</section>
-
+  <section class="card">
+    <h2>Seguridad</h2>
+    <p class="result">
+      • No compartas contraseñas.<br>
+      • No abras enlaces sospechosos.<br>
+      • Mantén tus aplicaciones actualizadas.<br>
+      • Revisa los permisos de tus aplicaciones.
+    </p>
+    <button class="secondary" onclick="refreshData()">
+      Actualizar diagnóstico
+    </button>
+  </section>
 </main>
-</div>
 
 <footer>
- GOHAN SECURITY © 2026<br>
- SISTEMA DE DIAGNÓSTICO LOCAL Y VOLUNTARIO
+  GOHAN SECURITY · Herramienta de diagnóstico informativo
 </footer>
 
 <script>
-let currentReport=null;
-let importedReports=[];
-let wifiSharedName="";
+  function refreshData() {
+    const device = /Android/i.test(navigator.userAgent)
+      ? "Dispositivo Android"
+      : /iPhone|iPad/i.test(navigator.userAgent)
+      ? "Dispositivo Apple"
+      : "Otro dispositivo";
 
-function show(id,value){
- document.getElementById(id).textContent=value;
-}
+    document.getElementById("deviceStatus").textContent = "Disponible";
+    document.getElementById("deviceInfo").textContent =
+      device + " · Plataforma: " + navigator.platform;
 
-function log(message){
- const box=document.getElementById("activity");
- box.textContent="["+new Date().toLocaleTimeString()+"] "+message+"\n"+box.textContent;
-}
+    document.getElementById("connectionStatus").textContent =
+      navigator.onLine ? "Conectado" : "Sin conexión";
 
-// MENÚ
-document.querySelectorAll(".nav").forEach(button=>{
- button.addEventListener("click",()=>{
-  document.querySelectorAll(".nav").forEach(b=>b.classList.remove("active"));
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  button.classList.add("active");
-  document.getElementById(button.dataset.page).classList.add("active");
- });
-});
+    const connection = navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection;
 
-// DISPOSITIVO
-function getDevice(){
- const data={
-  Plataforma:navigator.userAgentData?.platform||navigator.platform||"No disponible",
-  Idioma:navigator.language,
-  Procesadores:navigator.hardwareConcurrency||"No disponible",
-  Memoria:navigator.deviceMemory?navigator.deviceMemory+" GB":"No disponible",
-  Pantalla:screen.width+" x "+screen.height,
-  ZonaHoraria:Intl.DateTimeFormat().resolvedOptions().timeZone
- };
- show("deviceResult",JSON.stringify(data,null,2));
- document.getElementById("statDevice").textContent="DETECTADO";
- log("Dispositivo consultado.");
- return data;
-}
+    document.getElementById("connectionInfo").textContent =
+      connection && connection.effectiveType
+        ? "Tipo de conexión: " + connection.effectiveType
+        : "Tipo de conexión no disponible en este navegador.";
 
-// NAVEGADOR
-function getBrowser(){
- const data={
-  Navegador:navigator.userAgent,
-  CookiesHabilitadas:navigator.cookieEnabled,
-  ContextoSeguro:window.isSecureContext
- };
- show("browserResult",JSON.stringify(data,null,2));
- document.getElementById("statBrowser").textContent="DETECTADO";
- log("Navegador consultado.");
- return data;
-}
+    document.getElementById("browserStatus").textContent =
+      "Detectado";
 
-// RED
-function getNetwork(){
- const connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
- const data={
-  Estado:navigator.onLine?"Con conexión":"Sin conexión",
-  TipoEfectivo:connection?.effectiveType||"No disponible",
-  AhorroDeDatos:connection?.saveData??"No disponible"
- };
- show("networkResult",JSON.stringify(data,null,2));
- document.getElementById("statNetwork").textContent=navigator.onLine?"ONLINE":"OFFLINE";
- log("Red consultada.");
- return data;
-}
+    document.getElementById("browserInfo").textContent =
+      navigator.userAgent;
 
-// WIFI VOLUNTARIO
-function saveWifi(){
- const name=document.getElementById("wifiName").value.trim();
- if(!name){
-  show("wifiResult","Escribe el nombre de la red si deseas compartirlo.");
-  return;
- }
- wifiSharedName=name;
- show("wifiResult","Nombre guardado voluntariamente para el informe: "+name);
- log("Nombre Wi-Fi agregado voluntariamente.");
-}
-
-// ARCHIVOS
-async function analyzeFile(){
- const file=document.getElementById("fileInput").files[0];
- if(!file){
-  show("fileResult","Selecciona un archivo primero.");
-  return;
- }
- let hash="No disponible";
- try{
-  if(!crypto.subtle)throw new Error();
-  const buffer=await file.arrayBuffer();
-  const digest=await crypto.subtle.digest("SHA-256",buffer);
-  hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");
- }catch(e){}
- const data={
-  Nombre:file.name,
-  Tamaño:file.size+" bytes",
-  Tipo:file.type||"Desconocido",
-  FechaModificacion:new Date(file.lastModified).toLocaleString(),
-  SHA256:hash
- };
- show("fileResult",JSON.stringify(data,null,2));
- log("Archivo revisado localmente.");
-}
-
-// DIAGNÓSTICO
-function diagnostico(){
- document.getElementById("progressBar").style.width="100%";
- const text=[
-  "DIAGNÓSTICO COMPLETADO",
-  "Estado: "+(navigator.onLine?"Con conexión":"Sin conexión"),
-  "Contexto seguro: "+window.isSecureContext,
-  "Idioma: "+navigator.language,
-  "Fecha: "+new Date().toLocaleString(),
-  "",
-  "Este diagnóstico no certifica que el dispositivo esté libre de amenazas."
- ].join("\n");
- show("dashboardResult",text);
- document.getElementById("statNetwork").textContent=navigator.onLine?"ONLINE":"OFFLINE";
- log("Diagnóstico general completado.");
-}
-
-// INFORMES
-function createReport(){
- if(!document.getElementById("consent").checked){
-  show("reportResult","Debes aceptar antes de generar el informe.");
-  return;
- }
- currentReport={
-  proyecto:"GOHAN SECURITY",
-  fecha:new Date().toISOString(),
-  dispositivo:getDevice(),
-  navegador:getBrowser(),
-  red:getNetwork(),
-  wifi:wifiSharedName||"No compartido"
- };
- show("reportResult",JSON.stringify(currentReport,null,2));
- log("Informe generado con consentimiento.");
-}
-
-function downloadReport(){
- if(!currentReport){
-  show("reportResult","Primero genera un informe.");
-  return;
- }
- const blob=new Blob([JSON.stringify(currentReport,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download="GOHAN-SECURITY.json";
- document.body.appendChild(a);
- a.click();
- a.remove();
- URL.revokeObjectURL(url);
- log("Informe descargado.");
-}
-
-function importReport(){
- const file=document.getElementById("importInput").files[0];
- if(!file){
-  show("importResult","Selecciona un informe JSON.");
-  return;
- }
- const reader=new FileReader();
- reader.onload=()=>{
-  try{
-   const data=JSON.parse(reader.result);
-   if(!data||typeof data!=="object"||Array.isArray(data))throw new Error();
-   importedReports.push(data);
-   document.getElementById("statReports").textContent=importedReports.length;
-   show("importResult","Informe importado correctamente.");
-   log("Informe importado.");
-  }catch(e){
-   show("importResult","Archivo JSON no válido.");
+    updateClock();
   }
- };
- reader.readAsText(file);
-}
 
-function showImported(){
- show("importResult",importedReports.length?JSON.stringify(importedReports,null,2):"No hay informes importados.");
-}
+  function updateClock() {
+    const now = new Date();
 
-function clearImported(){
- importedReports=[];
- document.getElementById("importInput").value="";
- document.getElementById("statReports").textContent="0";
- show("importResult","Informes eliminados de esta sesión.");
- log("Informes eliminados.");
-}
+    document.getElementById("clock").textContent =
+      now.toLocaleTimeString("es-PA");
 
-// SEGURIDAD
-function securityCheck(){
- const data={
-  HTTPS:window.isSecureContext?"Activo":"No activo",
-  Cookies:navigator.cookieEnabled?"Habilitadas":"Deshabilitadas",
-  Internet:navigator.onLine?"Con conexión":"Sin conexión",
-  Consejo:"Mantén el sistema y navegador actualizados."
- };
- show("securityResult",JSON.stringify(data,null,2));
- log("Comprobación de seguridad realizada.");
-}
+    document.getElementById("date").textContent =
+      now.toLocaleDateString("es-PA", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+  }
 
-// INICIO
-document.getElementById("statNetwork").textContent=navigator.onLine?"ONLINE":"OFFLINE";
+  function saveWifi() {
+    const name = document.getElementById("wifiName").value.trim();
+
+    document.getElementById("wifiResult").textContent =
+      name
+        ? "Nombre introducido: " + name
+        : "Escribe un nombre antes de guardar.";
+
+  }
+
+  async function inspectFile() {
+    const file = document.getElementById("fileInput").files[0];
+    const result = document.getElementById("fileResult");
+
+    if (!file) {
+      result.textContent = "Selecciona un archivo primero.";
+      return;
+    }
+
+    let hash = "No disponible";
+
+    try {
+      if (crypto.subtle) {
+        const buffer = await file.arrayBuffer();
+        const digest = await crypto.subtle.digest("SHA-256", buffer);
+
+        hash = Array.from(new Uint8Array(digest))
+          .map(byte => byte.toString(16).padStart(2, "0"))
+          .join("");
+      }
+    } catch (error) {
+      hash = "No se pudo calcular";
+    }
+
+    result.textContent =
+      "Nombre: " + file.name +
+      " | Tamaño: " + (file.size / 1024).toFixed(2) + " KB" +
+      " | Tipo: " + (file.type || "Desconocido") +
+      " | SHA-256: " + hash;
+  }
+
+  function createReport() {
+    if (!document.getElementById("consent").checked) {
+      document.getElementById("reportResult").textContent =
+        "Debes confirmar que deseas generar el informe.";
+      return;
+    }
+
+    const report = {
+      application: "GOHAN SECURITY",
+      date: new Date().toISOString(),
+      device: navigator.platform,
+      browser: navigator.userAgent,
+      online: navigator.onLine,
+      wifiName: document.getElementById("wifiName").value.trim() || null
+    };
+
+    const blob = new Blob(
+      [JSON.stringify(report, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "gohan-security-report.json";
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    document.getElementById("reportResult").textContent =
+      "Informe generado y descargado en tu dispositivo.";
+  }
+
+  window.addEventListener("online", refreshData);
+  window.addEventListener("offline", refreshData);
+
+  refreshData();
+  setInterval(updateClock, 1000);
 </script>
+
 </body>
-</html>
-<style>
-:root {
-  --green: #9bf00b;
-  --bg: #070b08;
-  --panel: #101812;
-  --border: #293b2d;
-  --text: #e8f5e9;
-  --muted: #91a397;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-}
-
-header {
-  padding: 25px 15px;
-  text-align: center;
-  background: #090f0b;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  color: var(--green);
-  font-size: 25px;
-  font-weight: 900;
-  letter-spacing: 4px;
-}
-
-.header-status {
-  margin-top: 10px;
-  color: var(--green);
-  font-size: 13px;
-}
-
-.layout {
-  display: block;
-  width: 100%;
-}
-
-.sidebar {
-  width: 100%;
-  display: flex;
-  gap: 8px;
-  padding: 12px;
-  overflow-x: auto;
-  background: #0b120d;
-  border-bottom: 1px solid var(--border);
-}
-
-.sidebar-title {
-  display: none;
-}
-
-.nav {
-  flex: 0 0 auto;
-  width: auto;
-  padding: 11px 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #111a14;
-  color: var(--text);
-  font-size: 12px;
-  text-align: center;
-}
-
-.nav.active {
-  background: #24351c;
-  border-color: var(--green);
-  color: var(--green);
-}
-
-main {
-  width: 100%;
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px 15px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-h1 {
-  font-size: 26px;
-  margin-bottom: 8px;
-}
-
-h2 {
-  color: var(--green);
-  font-size: 17px;
-}
-
-.subtitle,
-.muted {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.card {
-  min-width: 0;
-  padding: 16px;
-  margin-bottom: 14px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-
-.stat-icon {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.stat-label {
-  color: var(--muted);
-  font-size: 10px;
-}
-
-.stat-value {
-  color: var(--green);
-  font-size: 19px;
-  font-weight: bold;
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-}
-
-.btn {
-  padding: 12px 15px;
-  margin: 5px 3px 5px 0;
-  border: 1px solid var(--green);
-  border-radius: 7px;
-  background: var(--green);
-  color: #10170b;
-  font-weight: bold;
-}
-
-.btn.secondary {
-  background: #26372b;
-  border-color: var(--border);
-  color: white;
-}
-
-.btn.danger {
-  background: #8e3030;
-  border-color: #8e3030;
-  color: white;
-}
-
-.result {
-  padding: 13px;
-  margin-top: 12px;
-  min-height: 40px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #080e09;
-  color: #b8ed9a;
-  font-size: 12px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  background: #080e09;
-  color: white;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-}
-
-input[type="file"] {
-  max-width: 100%;
-  margin: 12px 0;
-}
-
-label {
-  display: block;
-  margin: 12px 0;
-  font-size: 13px;
-}
-
-.notice {
-  padding: 13px;
-  background: #241f12;
-  border-left: 3px solid #ffc857;
-  border-radius: 5px;
-  color: #f3dfaa;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.progress {
-  height: 7px;
-  margin-top: 12px;
-  overflow: hidden;
-  background: #26372b;
-  border-radius: 10px;
-}
-
-.progress div {
-  height: 100%;
-  background: var(--green);
-  transition: width .5s;
-}
-
-footer {
-  padding: 25px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-@media (max-width: 380px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+ </html>
+ 
