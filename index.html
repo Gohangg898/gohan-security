@@ -379,6 +379,210 @@
   setInterval(updateClock, 1000);
 </script>
 
+<!-- GOHAN SECURITY -->
+<section id="gohan-security-panel" style="background:#080d09;color:white;padding:20px;border-radius:15px;margin:20px 0;font-family:Arial">
+  <h2 style="color:#9bf00b">GOHAN SECURITY</h2>
+
+  <div id="visitor-consent">
+    <p>¿Aceptas compartir datos técnicos básicos de tu dispositivo para el registro de visitas?</p>
+    <button id="accept-consent">Aceptar</button>
+    <button id="reject-consent">Rechazar</button>
+  </div>
+
+  <hr>
+
+  <h3>Panel de administrador</h3>
+  <input id="admin-email" type="email" placeholder="Correo del administrador">
+  <input id="admin-password" type="password" placeholder="Contraseña">
+  <button id="admin-login">Iniciar sesión</button>
+
+  <p id="gohan-message"></p>
+
+  <div id="admin-history" hidden>
+    <h3>Historial de visitas</h3>
+    <button id="refresh-history">Actualizar historial</button>
+    <button id="admin-logout">Cerrar sesión</button>
+    <div id="visit-list"></div>
+  </div>
+</section>
+
+<style>
+#gohan-security-panel input {
+  display:block;width:100%;box-sizing:border-box;
+  padding:12px;margin:10px 0;
+  background:#172019;color:white;
+  border:1px solid #9bf00b;border-radius:7px;
+}
+#gohan-security-panel button {
+  padding:11px;margin:5px;
+  background:#9bf00b;color:#080d09;
+  border:0;border-radius:7px;font-weight:bold;
+}
+.visit-card {
+  background:#172019;padding:12px;margin-top:10px;
+  border-left:3px solid #9bf00b;border-radius:7px;
+  overflow-wrap:anywhere;
+}
+</style>
+
+<script type="module">
+import { createClient } from
+'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = "https://oebkvguqxupcupmmsxoc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_g742LaSp53FZLoR4PErrxQ_Be_rfmRC";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const message = document.getElementById('gohan-message');
+const consentBox = document.getElementById('visitor-consent');
+
+function detectDevice() {
+  const ua = navigator.userAgent;
+  if (/iPhone/i.test(ua)) return 'iPhone';
+  if (/iPad/i.test(ua)) return 'iPad';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Macintosh|Mac OS/i.test(ua)) return 'Mac';
+  if (/Linux/i.test(ua)) return 'Linux';
+  return 'Otro dispositivo';
+}
+
+function detectBrowser() {
+  const ua = navigator.userAgent;
+  if (/Edg/i.test(ua)) return 'Microsoft Edge';
+  if (/OPR|Opera/i.test(ua)) return 'Opera';
+  if (/Firefox/i.test(ua)) return 'Firefox';
+  if (/Chrome/i.test(ua)) return 'Google Chrome';
+  if (/Safari/i.test(ua)) return 'Safari';
+  return 'Otro navegador';
+}
+
+// CONSENTIMIENTO
+const consent = localStorage.getItem('gohan-consent');
+
+if (consent === 'yes' || consent === 'no') {
+  consentBox.hidden = true;
+}
+
+document.getElementById('accept-consent').onclick = async () => {
+  localStorage.setItem('gohan-consent', 'yes');
+  consentBox.hidden = true;
+
+  const { error } = await supabase
+    .from('gohan_visits')
+    .insert({
+      event_type: 'page_view',
+      device: detectDevice(),
+      browser: detectBrowser(),
+      section_name: 'Página principal',
+      consent: true
+    });
+
+  message.textContent = error
+    ? 'No se pudo registrar la visita.'
+    : 'Visita registrada correctamente.';
+};
+
+document.getElementById('reject-consent').onclick = () => {
+  localStorage.setItem('gohan-consent', 'no');
+  consentBox.hidden = true;
+};
+
+// LOGIN ADMINISTRADOR
+document.getElementById('admin-login').onclick = async () => {
+  const email = document.getElementById('admin-email').value;
+  const password = document.getElementById('admin-password').value;
+
+  message.textContent = 'Comprobando acceso...';
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message.textContent = 'Acceso denegado. Revisa tus datos.';
+    return;
+  }
+
+  const { data: userData } = await supabase.auth.getUser();
+
+  const { data: admin, error: adminError } = await supabase
+    .from('gohan_admins')
+    .select('user_id')
+    .eq('user_id', userData.user.id)
+    .maybeSingle();
+
+  if (adminError || !admin) {
+    await supabase.auth.signOut();
+    message.textContent = 'Esta cuenta no tiene permisos de administrador.';
+    return;
+  }
+
+  message.textContent = 'Bienvenido al panel de administración.';
+  document.getElementById('admin-history').hidden = false;
+
+  await loadHistory();
+};
+
+// HISTORIAL
+async function loadHistory() {
+  const list = document.getElementById('visit-list');
+  list.textContent = 'Cargando historial...';
+
+  const { data, error } = await supabase
+    .from('gohan_visits')
+    .select('id,event_type,device,browser,section_name,created_at')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (error) {
+    list.textContent = 'Error al consultar el historial.';
+    return;
+  }
+
+  list.replaceChildren();
+
+  if (!data.length) {
+    list.textContent = 'Todavía no hay visitas registradas.';
+    return;
+  }
+
+  data.forEach(visit => {
+    const card = document.createElement('div');
+    card.className = 'visit-card';
+
+    const details = document.createElement('p');
+    details.textContent =
+      'Visita #' + visit.id +
+      ' | ' + visit.device +
+      ' | ' + visit.browser;
+
+    const section = document.createElement('p');
+    section.textContent = 'Sección: ' + visit.section_name;
+
+    const date = document.createElement('p');
+    date.textContent =
+      new Date(visit.created_at).toLocaleString();
+
+    card.append(details, section, date);
+    list.appendChild(card);
+  });
+}
+
+document.getElementById('refresh-history').onclick = loadHistory;
+
+// CERRAR SESIÓN
+document.getElementById('admin-logout').onclick = async () => {
+  await supabase.auth.signOut();
+
+  document.getElementById('admin-history').hidden = true;
+  message.textContent = 'Sesión cerrada.';
+};
+
+</script>
+  
 </body>
  </html>
  
